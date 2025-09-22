@@ -11,7 +11,7 @@ _useful for debugging in environments where ASan nor Valgrind like-software is a
 
 - not thread safe  
 - adds performance overhead → **don’t use in production**  
-- c90+ required  
+- C90+ only  
 
 
 ## usage
