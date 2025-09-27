@@ -1,7 +1,7 @@
 # leaked.h
 a tiny memory leak detector for C that wraps malloc, calloc, realloc, free and keeps track of them in a linked list. when the program exits it prints what was never freed.  
 
-_useful for debugging in environments where ASan nor Valgrind like-software is available._
+_useful for debugging in environments where ASan nor Valgrind like-software is not available._
 
 ## notes
 
