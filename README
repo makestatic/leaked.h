@@ -1,0 +1,45 @@
+
+
+                      LEAKED.H                        
+Header-only memory leak detector for C .  It trackes
+allocations/frees, warns on double frees, and shows
+memory alive and leaks at program exit. also it supports
+multi-file projects with a single global tracker.                              
+
+                        USAGE:
+// main.c :
+
+    #define LEAKED_IMPLEMENTATION
+    #include "leaked.h"
+    
+    int main(void)
+    {
+        leaked_init();         // call once at start
+    
+        int* a = malloc(10);   // tracked
+        int* b = calloc(5, 1); // tracked
+        a = realloc(a, 20);    // tracked
+    
+        free(b);               // free 'b'
+        free(b);               // double-free !
+    
+        // forgot to free 'a' !
+    
+        return 0;
+    }
+
+
+                    OUTPUT EXAMPLE:
+[WARN] invalid free 0x4222f0
+[LEAK] 0x4222a0 (20 bytes) at main.c:9 not freed
+[LEAK] 0x4222b0 (10 bytes) at main.c:7 not freed
+[LEAKED] 2 leak(s), allocs=3 frees=1 alive=2 ;; 30 bytes alive
+
+
+                        NOTES:
+- C17+ ONLY
+- DEFINE LEAKED_IMPLEMENTATION IN ONE '.C' FILE ONLY,
+  INCLUDE NORMALLY IN OTHERS
+- LEAKES REPORTED AT PROGRAM EXIT AUTOMATICALLY
+- MINIMAL OVERHEAD, INTENDED FOR DEBUGGING ONLY
+- ANSI COLORS USED IN TERMINAL; PLAIN TEXT IF UNSUPPORTED
