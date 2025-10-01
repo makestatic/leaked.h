@@ -1,10 +1,14 @@
 
 
-                      LEAKED.H                        
-Header-only memory leak detector for C .  It trackes
-allocations/frees, warns on double frees, and shows
-memory alive and leaks at program exit. also it supports
-multi-file projects with a single global tracker.                              
+                       LEAKED.H                        
+Simple memory leak detector for C. It tracks
+allocations/frees, warns on double frees/invalid use,
+and shows memory alive and leaks at program exit.
+Also supports multi-file projects with a single global tracker.
+                                                                
+Copyright (c) 2023, Ali Almalki, All rights reserved.
+              (BSD-3-Clause)
+
 
                         USAGE:
 // main.c :
@@ -30,16 +34,14 @@ multi-file projects with a single global tracker.
 
 
                     OUTPUT EXAMPLE:
-[WARN] invalid free 0x4222f0
-[LEAK] 0x4222a0 (20 bytes) at main.c:9 not freed
-[LEAK] 0x4222b0 (10 bytes) at main.c:7 not freed
-[LEAKED] 2 leak(s), allocs=3 frees=1 alive=2 ;; 30 bytes alive
+[WARN] invalid free 0x3000022300 at main.c:13
+Leaked allocations:
+  1) ptr=0x30000222a0 size=20 allocated at main.c:10 (realloc)
+Total leaked: 20 bytes in 1 allocation
 
 
                         NOTES:
-- C17+ ONLY
-- DEFINE LEAKED_IMPLEMENTATION IN ONE '.C' FILE ONLY,
-  INCLUDE NORMALLY IN OTHERS
-- LEAKES REPORTED AT PROGRAM EXIT AUTOMATICALLY
+- C17+
+- DEFINE ‘LEAKED_IMPLEMENTATION’ IN ONE '.c' FILE ONLY (e.g ‘main.c’),
+  INCLUDE NORMALLY IN OTHER FILES
 - MINIMAL OVERHEAD, INTENDED FOR DEBUGGING ONLY
-- ANSI COLORS USED IN TERMINAL; PLAIN TEXT IF UNSUPPORTED
