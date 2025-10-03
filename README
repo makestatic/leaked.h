@@ -1,47 +1,35 @@
+ 							LEAKED.H
+thread-safe memory bug catcher for C (C89+).  it tracks allocations and
+frees, warns on invalid or double frees, and reports leaks at program exit
+(it handle crash).  also it works across multiple files with a single global
+tracker and colored output enabled by default.
 
+Copyright (c) 2023, Ali Almalki, All rights reserved. BSD-3-Clause.
 
-                       LEAKED.H                        
-Simple memory leak detector for C. It tracks
-allocations/frees, warns on double frees/invalid use,
-and shows memory alive and leaks at program exit.
-Also supports multi-file projects with a single global tracker.
-                                                                
-Copyright (c) 2023, Ali Almalki, All rights reserved.
-              (BSD-3-Clause)
-
-
-                        USAGE:
-// main.c :
-
+USAGE:
+    // main.c
     #define LEAKED_IMPLEMENTATION
     #include "leaked.h"
-    
+
     int main(void)
     {
-        leaked_init();         // call once at start
-    
-        int* a = malloc(10);   // tracked
-        int* b = calloc(5, 1); // tracked
-        a = realloc(a, 20);    // tracked
-    
-        free(b);               // free 'b'
-        free(b);               // double-free !
-    
-        // forgot to free 'a' !
-    
-        return 0;
-    }
+        leaked_init();           // call once at program start
+		...
+		return 0;
+  	}
 
 
-                    OUTPUT EXAMPLE:
-[WARN] invalid free 0x3000022300 at main.c:13
-Leaked allocations:
-  1) ptr=0x30000222a0 size=20 allocated at main.c:10 (realloc)
-Total leaked: 20 bytes in 1 allocation
 
+OUTPUT EXAMPLE:
+	[LEAKED] invalid free at 0x30000332a0 (main.c:42)
+	[LEAKED] 1 alloc(s) 42 bytes at 0x30000332a0 (main.c:69)
+	[LEAKED] 1 alloc(s) 20 bytes at 0x30000332a0 (main.c:420)
+	[LEAKED] total (2) leaks, (62) bytes
 
-                        NOTES:
-- C17+
-- DEFINE ‘LEAKED_IMPLEMENTATION’ IN ONE '.c' FILE ONLY (e.g ‘main.c’),
-  INCLUDE NORMALLY IN OTHER FILES
-- MINIMAL OVERHEAD, INTENDED FOR DEBUGGING ONLY
+NOTES:
+	- ‘#define LEAKED_IMPLEMENTATION’ in one .c file only (e.g main.c)
+	  include normally in other files
+	- minimal overhead, intended for debugging only
+	- enable thread-safety with: #define LEAKED_THREAD_SAFE
+	- disable colors with: #define LEAKED_NO_COLOR
+
