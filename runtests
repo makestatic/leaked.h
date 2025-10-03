@@ -1,0 +1,15 @@
+cc sttest.c -o program -Wall -Wextra -g3 && ./program
+if [ $? -eq 0 ]; then
+    echo "[TEST FAILED]"
+else
+    echo "[TEST PASSED]"
+fi
+cc mttest.c -o program -Wall -Wextra -g3 && ./program
+if [ $? -eq 0 ]; then
+    echo "[TEST FAILED]"
+else
+    echo "[TEST PASSED]"
+fi
+rm program
+
+
